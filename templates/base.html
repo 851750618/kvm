@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link href="/static/bootstrap/css/font.css" rel="stylesheet" />
+	<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+	<link href="/static/bootstrap/css/theme_styles.css"	rel="stylesheet" />
+	<link href="/static/bootstrap/css/font-awesome.css"	rel="stylesheet" />
+    <link href="/static/favicon.ico" mce_href="favicon.ico" rel="bookmark" type="image/x-icon" />
+    <link href="/static/favicon.ico" mce_href="favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="/static/favicon.ico" mce_href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/common.js"></script>
+    <script type="text/javascript">
+        {% if messages %}
+            {% for message in messages %}
+            alert("{{ message }}")
+            {% endfor %}
+        {% endif %}
+    </script>
+    {% block header %}
+        <title>Cloud_Service_Delivery</title>
+    {% endblock %}
+</head>
+
+<body>
+<div class="theme-whbl pace-done">
+	<div class="pace pace-inactive">
+		<div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+			<div class="pace-progress-inner"></div>
+		</div>
+		<div class="pace-activity"></div>
+	</div>
+	<div id="theme-wrapper">
+		<header class="navbar" id="header-navbar">
+			<div class="container">
+				<div class="clearfix">
+					<button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="fa fa-bars"></span>
+					</button>
+					<div class="nav-no-collapse navbar-center pull-center hidden-sm hidden-xs">
+						<ul class="nav navbar-nav pull-center">
+							<li>
+								<a>
+									<font size="5" color="white">基于云计算的服务托管与交付系统</font>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="nav-no-collapse pull-right" id="header-nav">
+                        <ul class="nav navbar-nav" style="float:right; margin-right:0px;">
+							<li class="dropdown profile-dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown">
+									<img src="/static/image/head.jpg" />
+									<span class="hidden-xs">个人中心</span>
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="/changepwd">
+											<i class="fa fa-lock"></i>Change Password
+										</a>
+									</li>
+									<li>
+										<a href="/logout/">
+											<i class="fa fa-power-off"></i>Logout
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<ul class="nav navbar-nav" style="float:right; margin-right:-20px;">
+							<li class="dropdown profile-dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown">
+									<span class="hidden-xs ">用户角色
+                                        {% if current_role == 'User' %}
+                                            Subscriber
+                                        {% elif current_role == 'Creator' %}
+                                            Provider
+                                        {% elif current_role == 'Publisher' %}
+                                            Publisher
+                                        {% endif %}
+                                    </span>
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+
+                                        <li>
+                                            {% for role in roles %}
+                                                {% if role != 'Admin' %}
+                                                    <a href="/switch_role?role={{ role }}">
+                                                        <i class="glyphicon glyphicon-user"></i>
+                                                            {% if role == 'User' %}
+                                                                Subscriber
+                                                            {% elif role == 'Creator' %}
+                                                                Provider
+                                                            {% elif role == 'Publisher' %}
+                                                                Publisher
+                                                            {% endif %}                                                    </a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </li>
+
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div id="page-wrapper" class="container">
+			<div class="row">
+				<div id="nav-col">
+					<section id="col-left" class="col-left-nano">
+						<div id="col-left-inner" class="col-left-nano-content">
+							<div id="user-left-box" class="clearfix hidden-sm hidden-xs">
+								<img src="/static/image/head.jpg" />
+								<div class="user-box">
+									<span class="name" title="${loginUser.name}">
+										{{ login_user }}<br></br>
+                                        欢迎您!
+									</span>
+									<span class="status">
+										<i class="fa fa-circle"></i>
+										Online
+									</span>
+								</div>
+							</div>
+									<!-- fold -->
+                            <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+								<ul class="nav nav-pills nav-stacked">
+									<li>
+										<a class="dropdown-toggle collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+  											<i class="fa fa-table"></i>
+											<span>中间件服务</span>
+											<i class="fa fa-chevron-circle-right drop-icon"></i>
+										</a>
+										<div class="collapse in" id="collapseExample">
+										  <div class="well">
+												<ul class="navContent " style="display:block">
+                                                        {% if current_role == 'User' %}
+													    <li>
+															<a href="/murano/index/" class="dropdown-toggle">
+																<span><font color="black">我的环境</font></span>
+															</a>
+														</li>
+                                                        <li>
+														    <a href="/murano/packages/" class="dropdown-toggle">
+														        <span><font color="black">中间件服务</font></span>
+														    </a>
+														</li>
+                                                        {% endif %}
+
+                                                        {% if current_role == 'Publisher' %}
+														<li>
+														    <a href="/murano/package_review?action=get_pengding_list" class="dropdown-toggle">
+														        <span><font color="black">待审核的服务</font></span>
+														    </a>
+														</li>
+														<li>
+														    <a href="/murano/package_review?action=get_all_package_list" class="dropdown-toggle">
+														        <span><font color="black">服务管理</font></span>
+														    </a>
+														</li>
+                                                        {% endif %}
+                                                        {% if current_role == 'Admin' or current_role == 'User' %}
+														<li>
+														    <a href="/murano/instances/" class="dropdown-toggle">
+														        <span><font color="black">虚拟机实例</font></span>
+														    </a>
+														</li>
+                                                        {% endif %}
+                                                        {% if current_role == 'Creator' %}
+                                                            <li>
+                                                                <a href="/murano/publisher_package?action=get_packages_list" class="dropdown-toggle">
+                                                                    <span><font color="black">我创建的服务</font></span>
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
+												</ul>
+										  </div>
+										</div>
+									</li>
+									<!-- fold -->
+									<li>
+										<a class="dropdown-toggle collapsed" data-toggle="collapse" href="#collapseApp" aria-expanded="true" aria-controls="collapseApp">
+  											<i class="fa fa-file-o"></i>
+											<span>Web应用</span>
+											<i class="fa fa-chevron-circle-right drop-icon"></i>
+										</a>
+										<div class="collapse in" id="collapseApp">
+										  <div class="well">
+												<ul class="navContent " style="display:block">
+													    <li>
+                                                                {% if current_role == 'Creator' %}
+                                                                <a href="/wso2/index/" class="dropdown-toggle">
+																<span><font color="black">我创建的Web应用</font></span>
+                                                                {% elif current_role == 'Publisher' %}
+                                                                <a href="/wso2/index/" class="dropdown-toggle">
+                                                                <span><font color="black">Web应用管理</font></span>
+                                                                {% elif current_role == 'User' %}
+                                                                <a href="/wso2/webapp?not_return_request=on" class="dropdown-toggle">
+                                                                <span><font color="black">Web应用</font></span>
+                                                                {% endif %}
+															</a>
+														</li>
+                                                        {% if current_role == 'Publisher' %}
+														<li>
+														    <a href="/wso2/index?show_in_review_only=on" class="dropdown-toggle">
+														        <span><font color="black">待审核的Web应用</font></span>
+														    </a>
+														</li>
+                                                        {% endif %}
+{#                                                        {% if current_role == 'Publisher' %}#}
+{#														<li>#}
+{#														    <a href="/murano/packages" class="dropdown-toggle">#}
+{#														        <span><font color="black">管理我创建的服务</font></span>#}
+{#														    </a>#}
+{#														</li>#}
+{#                                                        {% endif %}#}
+{#                                                        {% if current_role == 'Creator' %}#}
+{#														<li>#}
+{#														    <a href="/wso2/create_web_app/" class="dropdown-toggle">#}
+{#														        <span><font color="black">创建Web服务</font></span>#}
+{#														    </a>#}
+{#														</li>#}
+{#                                                        {% endif %}#}
+                                                        {% if current_role == 'User' %}
+														<li>
+														    <a href="/wso2/my_subscriptions/" class="dropdown-toggle">
+														        <span><font color="black">我的申请</font></span>
+														    </a>
+														</li>
+                                                        {% endif %}
+												</ul>
+										  </div>
+										</div>
+									</li>
+									<!-- fold -->
+                                    {% if current_role == 'Admin' %}
+									<li>
+										<a href="/usermanage?action=get_users" class="dropdown-toggle">
+											<i class="fa fa-user"></i>
+											<span>用户管理</span>
+											<i class="fa fa-chevron-circle-right drop-icon"></i>
+										</a>
+									</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+					</section>
+				</div>
+				<div id="content-wrapper">
+					<div class="row" style="opacity: ;ity: 1;">
+						<div class="col-lg-12">
+							{% block body %}{% endblock %}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="jvectormap-label"></div>
+	</div>
+</div>
+</body>
+
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+{% block footer %}{% endblock %}
+</html>

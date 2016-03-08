@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>App list</title>
+    <style type="text/css">
+	.form-group { overflow: hidden; }
+	a.disabled, a.disabled:hover, a.disabled:visited { cursor: not-allowed; color: #ccc !important; }
+	</style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<ol class="breadcrumb">
+			<li><a href="/">首页</a></li>
+			<li class="active"><span>用户</span></li>
+		</ol>
+		<h1>用户管理</h1>
+
+	<div class="row">
+	<div class="col-lg-12">
+		<div class="main-box clearfix">
+			<header class="main-box-header clearfix">
+					<!--create user start -->
+					<button type="button" style="float:right" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+					  创建用户
+					</button>
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title" id="myModalLabel">创建一个新的用户</h4>
+					      </div>
+					      <div class="modal-body">
+					        <form action="/usermanage" method="post">
+                                {% csrf_token %}
+					  			<p>名称: <input type="text" class="form-control" name="name" /></p>
+                                <p>密码: <input type="text" class="form-control" name="pass" /></p>
+                                <input type="hidden" class="form-control" name="action" value="add_user" />
+                                <p>角色</p>
+                                <div class="checkbox">
+                                    <label>
+                                      <input type="checkbox" name="1"> User
+                                    </label>
+                                    <label>
+                                      <input type="checkbox" name="2"> Creator
+                                    </label>
+                                    <label>
+                                      <input type="checkbox" name="3"> Publisher
+                                    </label>
+                                    <label>
+                                      <input type="checkbox" name="4"> Admin
+                                    </label>
+                                </div>
+					  			 <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							       <button type="submit" class="btn btn-primary" onclick="this.form.submit()">创建</button>
+					           </div>
+							</form>
+					      </div>
+
+					    </div>
+					  </div>
+					</div>
+					<!--create user end -->
+			</header>
+
+		<div class="main-box-body clearfix">
+				<div class="table-responsive clearfix">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th><span>name</span></th>
+								<th><span>roles</span></th>
+								<th><span>action</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in users_roles %}
+							<tr>
+								<td>{{ item.name }}</td>
+								<td>{{ item.role }}</td>
+								<td>
+								<!-- Single button -->
+									    <a class="btn btn-danger" href="/usermanage?action=del_user&user_name={{ item.name }}">删除</a>
+									    <!-- Edit start -->
+                                        <button class="btn btn-warning" data-toggle="modal" data-target="#{{ item.name }}">编辑用户角色</button>
+									    <!-- Edit end -->
+									  <!--  env edit zhezhaocheng  start-->
+										<div class="modal fade" id="{{ item.name }}" tabindex="-1" role="dialog" aria-labelledby="my{{ item.name }}">
+										  <div class="modal-dialog" role="document">
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										        <h4 class="modal-title" id="my{{ item.name }}">更改 {{ item.name }} 的角色</h4>
+										      </div>
+										      <div class="modal-body">
+										        <form action="/usermanage" method="post">
+                                                    {% csrf_token %}
+                                                    <p>Roles</p>
+                                                    <div class="checkbox">
+                                                    {% if '1' in item.role_array %}
+                                                        <label>
+                                                          <input type="checkbox" name="1" checked="true"> User
+                                                        </label>
+                                                    {% else %}
+                                                        <label>
+                                                          <input type="checkbox" name="1"> User
+                                                        </label>
+                                                    {% endif %}
+                                                    {% if '2' in item.role_array %}
+                                                        <label>
+                                                          <input type="checkbox" name="2" checked="true"> Creator
+                                                        </label>
+                                                    {% else %}
+                                                        <label>
+                                                          <input type="checkbox" name="2"> Creator
+                                                        </label>
+                                                    {% endif %}
+                                                    {% if '2' in item.role_array %}
+                                                        <label>
+                                                          <input type="checkbox" name="3" checked="true"> Publisher
+                                                        </label>
+                                                    {% else %}
+                                                        <label>
+                                                          <input type="checkbox" name="3"> Publisher
+                                                        </label>
+                                                    {% endif %}
+                                                    {% if '4' in item.role_array %}
+                                                        <label>
+                                                          <input type="checkbox" name="4" checked="true"> Admin
+                                                        </label>
+                                                    {% else %}
+                                                        <label>
+                                                          <input type="checkbox" name="4"> Admin
+                                                        </label>
+                                                    {% endif %}
+                                                    </div>
+										  			<input type="text" style="display:none" name="action" value="update_role">
+										  			<input type="text" style="display:none" name="user_name" value="{{ item.name }}">
+										  			 <div class="modal-footer">
+												        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												       <button type="submit" class="btn btn-primary" onclick="this.form.submit()">Update</button>
+										           </div>
+												</form>
+										      </div>
+
+										    </div>
+										  </div>
+										</div>
+									  <!--  env edit zhezhaocheng end -->
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+	</div>
+</div>
+
+{% endblock %}

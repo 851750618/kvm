@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>Wso2</title>
+{% endblock %}
+{% block body %}
+<div class="row">
+	<div class="col-lg-12">
+		<ol class="breadcrumb">
+			<li><a href="/">首页</a></li>
+			<li class="active"><span>Web应用</span></li>
+		</ol>
+		<h1>Web应用</h1>
+    </div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+        <div class="main-box clearfix">
+			<header class="main-box-header clearfix">
+			</header>
+
+		<div class="main-box-body clearfix">
+				<div class="table-responsive clearfix">
+                    {% for i in all_pub %}
+                        <div class="col-lg-2">
+                            <div class="thumbnail">
+                                <a href="/wso2/sub_app?action=get_details&name={{ i.name }}&uuid={{ i.uuid }}&version={{ i.version }}&time={{ i.create_time }}&provider={{ i.owner }}&status={{ i.status }}"><img src="/static/image/webapp.jpg" ></a>
+                                <div class="caption">
+                                <strong>{{ i.name }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+				</div>
+			</div>
+	</div>
+</div>
+{% endblock %}

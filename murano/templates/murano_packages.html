@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>Murano</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<ol class="breadcrumb">
+			<li><a href="/">首页</a></li>
+			<li class="active"><span>中间件服务</span></li>
+		</ol>
+		<h1>服务目录</h1>
+
+
+	<div class="row">
+	<div class="col-lg-12">
+		<div class="main-box clearfix">
+			<header class="main-box-header clearfix">
+                                <!--create package start -->
+                {% if show == 1 %}
+                <button type="button" style="float:right" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                  导入应用包
+                </button>
+                {% endif %}
+                {% if show == 2 %}
+                <button type="button" style="float:right" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                  部署组合环境
+                </button>
+                {% endif %}
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">导入应用包</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form action="/murano/upload_package" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="package"/>
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                               <button type="submit" class="btn btn-primary" onclick="this.form.submit()">创建</button>
+                              </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--create package end -->
+			</header>
+
+		<div class="main-box-body clearfix">
+				<div class="table-responsive clearfix">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+                                <th><span>编号</span></th>
+								<th><span>名称</span></th>
+								<th><span>描述</span></th>
+                                {% if current_role != 'Publisher'  %}
+								<th><span>操作</span></th>
+                                {% else %}
+                                <th><span>状态</span></th>
+                                {% endif %}
+							</tr>
+						</thead>
+						<tbody>
+                            {% for item in packages_info %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.description }}</td>
+                                    <td>
+                                        <!-- action start -->
+                                        <!-- Single button -->
+                                        <div class="btn-group">
+                                          {% if show == 1 %}
+                                              {% if current_role == 'User'  %}
+                                                <button href="#" class="btn btn-success dropdown-toggle">快速部署</button>
+                                              {% else %}
+                                                 <button href="#" class="btn btn-default dropdown-toggle">已发布</button>
+                                              {% endif %}
+                                           {% endif %}
+                                           {% if show == 2 %}
+                                               {% if item.name in env_has_packages %}
+                                                   <button href="#" class="btn btn-default dropdown-toggle" Style="width:80px">移除</button>
+                                               {% else %}
+                                                    <button href="#" class="btn btn-default dropdown-toggle" Style="width:80px">添加</button>
+                                               {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <!-- action end -->
+                                    </td>
+							    </tr>
+                            {% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+	</div>
+</div>
+
+{% endblock %}

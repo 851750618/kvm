@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>Wso2</title>
+{% endblock %}
+{% block body %}
+<div class="row">
+	<div class="col-lg-12">
+		<ol class="breadcrumb">
+			<li><a href="/">首页</a></li>
+			<li class="active"><span>Web应用</span></li>
+		</ol>
+        {% if current_role == 'Creator' %}
+		<h1>Web应用</h1>
+        {% elif current_role == 'Publisher' %}
+            {% if show_in_review_only == 'on' %}
+                <h1>待审核Web应用</h1>
+            {% else %}
+                <h1>Web应用管理</h1>
+             {% endif %}
+        {% endif %}
+
+
+	<div class="row">
+	<div class="col-lg-12">
+		<div class="main-box clearfix">
+			<header class="main-box-header clearfix">
+                    {% if current_role == 'Creator' %}
+					<!--create env start -->
+					<button type="button" style="float:left" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+					  创建Web应用
+					</button>
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title" id="myModalLabel">创建web应用</h4>
+					      </div>
+					      <div class="modal-body">
+					        <form action="/wso2/add_new_web_app/" method="post">
+                                {% csrf_token %}
+					  			<p>名称: <input type="text" class="form-control" name="name" /></p>
+                                <p>显示名称: <input type="text" class="form-control" name="display_name" /></p>
+                                <p>url字段: <input type="text" class="form-control" name="context" /></p>
+                                <p>版本: <input type="text" class="form-control" name="version" /></p>
+                                <p>协议类型: <input type="text" class="form-control" name="transports" /></p>
+                                <p>代理url: <input type="text" class="form-control" name="webappurl" /></p>
+					  			 <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							       <button type="submit" class="btn btn-primary" onclick="this.form.submit()">创建</button>
+					           </div>
+							</form>
+					      </div>
+
+					    </div>
+					  </div>
+					</div>
+					<!--create env end -->
+                    {% endif %}
+			</header>
+
+		<div class="main-box-body clearfix">
+				<div class="table-responsive clearfix">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+                                <th><span>名称</span></th>
+								<th><span>版本</span></th>
+								<th><span>创建者</span></th>
+								<th><span>创建时间</span></th>
+								<th><span>状态</span></th>
+                                <th><span>操作</span></th>
+							</tr>
+						</thead>
+						<tbody>
+                            {% for item in all_web_app_info %}
+                                <tr>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.version }}</td>
+                                    <td>{{ item.owner }}</td>
+                                    <td>{{ item.create_time }}</td>
+                                    <td>{{ item.status }}</td>
+                                    <td>
+                                        {% if current_role == 'Creator'%}
+                                            {% if item.status == 'Created' or item.status == 'Rejected' %}
+                                                <a class="btn btn-danger" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=Submit for Review&application_id={{ item.uuid }}">提交审核</a>
+                                                <a class="btn btn-danger" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=delete&application_id={{ item.uuid }}">删除</a>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if current_role == 'Publisher' %}
+                                            {% if item.status == 'In-Review' %}
+                                                <a class="btn btn-danger" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=Reject&application_id={{ item.uuid }}">审核拒绝</a>
+                                                <a class="btn btn-info" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=Approve&application_id={{ item.uuid }}">审核通过</a>
+                                            {% elif item.status == 'Approved' %}
+                                                <a class="btn btn-info" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=Publish&application_id={{ item.uuid }}">发布</a>
+                                                <a class="btn btn-danger" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=delete&application_id={{ item.uuid }}">删除</a>
+                                            {% elif item.status == 'Published' %}
+                                                <a class="btn btn-warning" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=Unpublish&application_id={{ item.uuid }}">取消发布</a>
+                                                <a class="btn btn-danger" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=delete&application_id={{ item.uuid }}">删除</a>
+                                            {% else %}
+                                                <a class="btn btn-danger" href="/wso2/change_life_cycle?lifecycle_state_to_be_changed=delete&application_id={{ item.uuid }}">删除</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+							    </tr>
+                            {% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+	</div>
+</div>
+{% endblock %}

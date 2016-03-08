@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link href="/static/bootstrap/css/font.css" rel="stylesheet" />
+	<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+	<link href="/static/bootstrap/css/theme_styles.css" rel="stylesheet" />
+	<link href="/static/bootstrap/css/font-awesome.css" rel="stylesheet" />
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/common.js"></script>
+    <link href="/static/css/login.css" rel="stylesheet" />
+    <title>KVM Login</title>
+</head>
+
+<body>
+<form id="form" method="POST" action="/login_auth/">
+    {% csrf_token %}
+	<div class="login-box">
+		<h2>User Login</h2>
+		<div class="login-id">
+			<input name="username" type="text" placeholder="username" />
+		</div>
+		<div class="login-pwd">
+			<input name="password" type="password" placeholder="password" />
+		</div>
+		<button type="submit">Login</button>
+	</div>
+</form>
+</body>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</html>

@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>Wso2</title>
+    <link href="/static/css/asset.css"	rel="stylesheet" />
+{% endblock %}
+{% block body %}
+<div class="row">
+	<div class="col-lg-12">
+		<ol class="breadcrumb">
+			<li><a href="/">首页</a></li>
+			<li class="active"><span>Web应用</span></li>
+		</ol>
+		<h1>Web应用申请</h1>
+
+
+	<div class="row">
+	<div class="col-lg-12">
+		<div class="main-box clearfix">
+			<header class="main-box-header clearfix">
+			</header>
+
+		<div class="main-box-body clearfix">
+				<div class="table-responsive clearfix">
+{#start#}
+<div class="asset-description">
+
+
+
+    <div class="asset-description-header">
+        <div class="row">
+            <div class="">
+                <div class="asset-banner">
+                    <img src="/static/image/webapp.jpg">
+                </div>
+                <div class="asset-introduction-box">
+{#                    <img class="web-asset-img" src="/static/image/webapp.jpg">#}
+
+                    <h1>{{ webapp_details.name }}</h1>
+                    <h3 class="web-asset-clear"> Version {{ webapp_details.version }}</h3>
+                    <h4> by {{ webapp_details.provider }}</h4>
+                    <h4> status : {{ webapp_details.status }}</h4>
+                    <h4>updated : {{ webapp_details.time }}</h4>
+					<span class="asset-rating">
+                            <div class="asset-rating-0star"></div>
+                    </span>
+
+<div id="subscriptionActions">
+        {% if webapp_details.is_or_not_sub == 'not' %}
+		    <a href="/wso2/sub_app?action=sub&appname={{ webapp_details.name }}&appversion={{ webapp_details.version }}" class="btn btn-primary" id="btnUnsubscribe">申请</a>
+        {% else %}
+		    <a href="/wso2/sub_app?action=unsub&appname={{ webapp_details.name }}&appversion={{ webapp_details.version }}" class="btn btn-primary" id="btnUnsubscribe">取消申请</a>
+        {% endif %}
+
+</div>
+
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="assetp-properties">
+
+        <ul class="nav nav-tabs" id="assetp-tabs" data-aid="">
+            <li class="active">
+                <a href="#tab-overview" data-toggle="tab" data-type="basic">Overview</a>
+            </li>
+
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab-overview">
+                <div class="content">
+                    <div>
+			<legend>URLs:</legend>
+	    	<p><b>Gateway Endpoint</b></p>
+	    	<ul>
+			<li><a class="icon-globe" id="gatewayURL" href="{{ webapp_details.context }}" target="_blank">&nbsp;{{ webapp_details.context }}</a></li>
+	    	</ul>
+            <input type="hidden" id="skipGateway" value="false">
+
+
+
+	<div class="modal fade" id="messageModal2" style="display: none"></div>
+	<div id="confirmation-data2" style="display: none;">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">×</button>
+			<h3 class="modal-title">Modal header</h3>
+		</div>
+		<div class="modal-body">
+			<p>One fine body…</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn btn-other" data-dismiss="modal">Close</a>
+		</div>
+	</div>
+</div>
+
+
+                </div>
+            </div>
+
+
+
+            <div class="tab-pane" id="tab-reviews">
+
+
+		 <iframe name="socialIfr" id="socialIfr" src="https://54.222.138.103:9443/social/?target=webapp:a572d78d-fcd4-4dee-8d41-85a5186efdae&amp;user=admin" width="100%" height="100%" style="height: 300px;"></iframe>
+             <input value="a572d78d-fcd4-4dee-8d41-85a5186efdae" id="hdnAssetId" name="hdnAssetId" type="hidden">
+             <input value="admin" id="hdnUsertId" name="hdnAssetId" type="hidden">
+             <input value="-1234" id="hdnTenantId" name="hdnTenantId" type="hidden">
+
+
+		 <div id="comment-content" class="content user-review"></div>
+
+
+
+	   </div>
+        </div>
+
+         <div class="modal fade" id="messageModal1" style="display:none"></div>
+         <div id="confirmation-data1" style="display:none;">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h3 class="modal-title">Modal header</h3>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-other" data-dismiss="modal">Close</a>
+            </div>
+         </div>
+    </div>
+</div>
+{#end#}
+				</div>
+			</div>
+	</div>
+</div>
+{% endblock %}
