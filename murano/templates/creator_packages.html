@@ -22,6 +22,31 @@
 	<div class="col-lg-12">
 		<div class="main-box clearfix">
 			<header class="main-box-header clearfix">
+                                <!--create package start -->
+                <button type="button" style="float:right" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                  导入应用包
+                </button>
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">导入应用包</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form action="/murano/upload_package" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="package"/>
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                               <button type="submit" class="btn btn-primary" onclick="this.form.submit()">创建</button>
+                              </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--create package end -->
 			</header>
 
 		<div class="main-box-body clearfix">
