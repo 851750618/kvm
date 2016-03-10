@@ -38,7 +38,10 @@
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.type }}</td>
-                                    <td>{{ item.addr }}</td>
+                                    <td>
+                                        <li>{{ item.fixed_ip }}</li>
+                                        <li>{{ item.floating_ip }}</li>
+                                    </td>
                                     <td>{{ item.status }}</td>
 							    </tr>
                             {% endfor %}

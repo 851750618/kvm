@@ -1,7 +1,7 @@
 import urllib2
 import json
 
-murano_server = '10.2.32.19'
+murano_server = '10.109.253.112'
 def send_post(url,parm):
     postData = json.dumps(parm)
     req = urllib2.Request(url, postData)
@@ -43,7 +43,7 @@ httpbody = '\n'.join(data)
 print type(httpbody)
 print len(httpbody)
 
-req = urllib2.Request('http://10.2.32.19:5000/v1/catalog/packages',data=httpbody)
+req = urllib2.Request('http://' murano_server ':5000/v1/catalog/packages',data=httpbody)
 req.add_header('Content-type','multipart/form-data, boundary=AaB03x')
 req.add_header('Content-Length',len(httpbody))
 req.add_header("X-Auth-Token",getToken())

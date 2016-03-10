@@ -10,7 +10,7 @@ import urllib2
 import json
 
 domain = 'http://127.0.0.1:8000/'
-murano_server = '10.2.32.19'
+murano_server = '10.109.253.112'
 
 
 def login_show(request):
@@ -147,7 +147,8 @@ def murano_instances(request):
         return HttpResponseRedirect(domain + "login")
     username = request.session.get('username')
     current_role = request.session.get('current_role')
-    json_data = send_get(request,'http://' + murano_server + ':8774/v2.1/0ae57bf53171464c82f3d1cc850c3612/servers/detail')
+    json_data = send_get(request,'http://' + murano_server + ':8774/v2.1/24bc63132b534052a86a592560c472e5/servers/detail')
+    print json_data
     instance_type = {
         '1':'m1.tiny',
         '2':'m1.small',
@@ -167,7 +168,13 @@ def murano_instances(request):
         instance_info['name'] = i['name']
         instance_info['type'] = instance_type[i['flavor']['id']]
         instance_info['status'] = i['status']
-        instance_info['addr'] = i['addresses']['abc-network-a9420f3836c1432bbb685f28cfc5d03a'][0]['addr']
+        add_str = str(i['addresses'])
+        m = re.match(r".*u'(\d+\.\d+\.\d+\.\d+)'.*u'fixed'.*",add_str)
+        if m:
+            instance_info['fixed_ip'] = m.group(1)
+        n = re.match(r".*u'(\d+\.\d+\.\d+\.\d+)'.*u'floating'.*",add_str)
+        if n:
+            instance_info['floating_ip'] = n.group(1)
         instances_info.append(instance_info)
     return render(request,'murano_instances.html',{'login_user':username,'roles':get_loginuser_role(request),'current_role':current_role,'instances_info':instances_info})
 
@@ -212,7 +219,7 @@ def upload_package(request):
             author = s['Author']
     Package_review.objects.create(user=request.session.get('username'),name=name,desc=description,author=author,status='created',path=file_full_path)
     messages.info(request,name + ' 导入成功,等待管理员审核')
-    return HttpResponseRedirect(domain + 'murano/packages/')
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def admin_review_action(request):
     username = request.session.get('username')
