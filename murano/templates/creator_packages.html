@@ -76,8 +76,11 @@
                                 <td>{{ item.status }}</td>
 								<td>
 								<!-- Single button -->
+                                    {% if item.status == 'created' %}
+                                        <a href="/murano/package_review?action=in-review&&id={{ item.id }}" class="btn btn-info dropdown-toggle">提交审核</a>
+                                    {% endif %}
                                     {% if item.status == 'created' or item.status == 'rejected' %}
-                                        <a href="#" class="btn btn-danger dropdown-toggle">删除</a>
+                                        <a href="/murano/package_review?action=delete&&id={{ item.id }}" class="btn btn-danger dropdown-toggle">删除</a>
                                     {% endif %}
                                     {% if item.status == 'published' %}
                                         <a class="btn btn-success dropdown-toggle">已发布</a>

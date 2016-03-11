@@ -192,6 +192,13 @@
 										<div class="collapse in" id="collapseApp">
 										  <div class="well">
 												<ul class="navContent " style="display:block">
+                                                        {% if current_role == 'Publisher' %}
+														<li>
+														    <a href="/wso2/index?show_in_review_only=on" class="dropdown-toggle">
+														        <span><font color="black">待审核的Web应用</font></span>
+														    </a>
+														</li>
+                                                        {% endif %}
 													    <li>
                                                                 {% if current_role == 'Creator' %}
                                                                 <a href="/wso2/index/" class="dropdown-toggle">
@@ -205,13 +212,6 @@
                                                                 {% endif %}
 															</a>
 														</li>
-                                                        {% if current_role == 'Publisher' %}
-														<li>
-														    <a href="/wso2/index?show_in_review_only=on" class="dropdown-toggle">
-														        <span><font color="black">待审核的Web应用</font></span>
-														    </a>
-														</li>
-                                                        {% endif %}
 {#                                                        {% if current_role == 'Publisher' %}#}
 {#														<li>#}
 {#														    <a href="/murano/packages" class="dropdown-toggle">#}

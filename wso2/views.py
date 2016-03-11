@@ -14,7 +14,7 @@ import ssl
 import MySQLdb
 
 domain = 'http://127.0.0.1:8000/'
-wso2_server = '54.222.138.103'
+wso2_server = '10.108.165.246'
 wso2_database_server = '54.222.138.103'
 wso2_database_user = 'root'
 wso2_database_pass = '123456'

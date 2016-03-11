@@ -11,7 +11,7 @@
 			<li><a href="/">首页</a></li>
 			<li class="active"><span>中间件服务</span></li>
 		</ol>
-		<h1>服务目录</h1>
+		<h1>中间件服务</h1>
 
 
 	<div class="row">
@@ -20,9 +20,9 @@
 			<header class="main-box-header clearfix">
                                 <!--create package start -->
                 {% if show == 1 %}
-                <button type="button" style="float:right" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-                  导入应用包
-                </button>
+{#                <button type="button" style="float:right" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">#}
+{#                  导入应用包#}
+{#                </button>#}
                 {% endif %}
                 {% if show == 2 %}
                 <button type="button" style="float:right" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
@@ -79,11 +79,98 @@
                                         <div class="btn-group">
                                           {% if show == 1 %}
                                               {% if current_role == 'User'  %}
-                                                <button href="#" class="btn btn-success dropdown-toggle">快速部署</button>
+                                                <button data-toggle="modal"
+                                                        {% if item.name == 'Apache HTTP Server'  %}
+                                                        data-target="#apache"
+                                                        {% endif %}
+                                                type="button" class="btn btn-success dropdown-toggle">快速部署</button>
                                               {% else %}
-                                                 <button href="#" class="btn btn-default dropdown-toggle">已发布</button>
+{#                                                 <button href="#" class="btn btn-default dropdown-toggle">已发布</button>#}
                                               {% endif %}
                                            {% endif %}
+{#                      form defined start                 #}
+					<div class="modal fade" id="apache" tabindex="-1" role="dialog" aria-labelledby="myapache">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title" id="myapache">配置:Apache HTTP Server</h4>
+					      </div>
+					      <div class="modal-body">
+					        <form action="/murano/quick_deploy?service=apache" method="post">
+                                {% csrf_token %}
+<!-- 							form start -->
+{#                                apache start#}
+      <label class="control-label  " for="197d683744184180b0be907919a481f9_1-flavor">实例类型</label>
+  <div class=" ">
+
+        <select class="form-control" id="197d683744184180b0be907919a481f9_1-flavor" name="1-flavor" placeholder="Optional" data-original-title="" title="">
+<option value="m1.tiny">m1.tiny</option>
+<option value="m1.small">m1.small</option>
+<option value="m1.medium" selected="selected">m1.medium</option>
+<option value="m1.large">m1.large</option>
+<option value="m1.nano">m1.nano</option>
+<option value="m1.heat">m1.heat</option>
+<option value="m1.xlarge">m1.xlarge</option>
+<option value="m1.micro">m1.micro</option>
+</select>
+
+  </div>
+
+
+      <label class="control-label  required" for="197d683744184180b0be907919a481f9_1-osImage">实例镜像</label>
+
+        <select class="form-control" id="197d683744184180b0be907919a481f9_1-osImage" name="1-osImage">
+<option value="" selected="selected">选择镜像</option>
+<option value="915769cd-fcd6-40cb-bf4c-74535899361f">Debian 8 x64 (pre-installed murano-agent)</option>
+<option value="aec79765-c447-4f12-b553-f43cd563edf2">Ubuntu 14.04 x64 (pre-installed murano-agent)</option>
+<option value="036ef226-1f7f-42d3-a587-792f327468c9">debian</option>
+<option value="352447c1-2b86-46bd-a1ad-38fd7f9af325">ubuntu</option>
+</select>
+
+
+<div class="form-group ">
+      <label class="control-label  " for="197d683744184180b0be907919a481f9_1-availabilityZone">可用区</label>
+    <div class=" ">
+     <select class="form-control" id="197d683744184180b0be907919a481f9_1-availabilityZone" name="1-availabilityZone" placeholder="Optional">
+<option value="nova">nova</option>
+</select>
+    </div>
+</div>
+<div class="form-group ">
+      <label class="control-label  " for="197d683744184180b0be907919a481f9_1-unitNamingPattern">实例命名规则</label>
+        <span class="help-icon" data-toggle="tooltip" data-placement="top" title="Just letters, numbers, underscores and hyphens are allowed."><span class="fa fa-question-circle"></span></span>
+    <div class=" ">
+        <input class="form-control" id="197d683744184180b0be907919a481f9_1-unitNamingPattern" maxlength="64" name="1-unitNamingPattern" placeholder="Optional" type="text">
+
+    </div>
+
+</div>
+<div class="">
+  <div class="checkbox">
+
+          <label>
+            <input class="checkbox" id="197d683744184180b0be907919a481f9_0-assignFloatingIP" name="0-assignFloatingIP" placeholder="Optional" type="checkbox">
+            <span>分配浮动IP</span>
+
+          </label>
+
+      </div>
+</div>
+{#                                apache end#}
+<!-- 							form end -->
+					  			 <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							       <button type="submit" class="btn btn-primary" onclick="this.form.submit()">创建</button>
+					           </div>
+							</form>
+					      </div>
+
+					    </div>
+					  </div>
+					</div>
+					<!--apache end -->
+{#                        form defined end                #}
                                            {% if show == 2 %}
                                                {% if item.name in env_has_packages %}
                                                    <button href="#" class="btn btn-default dropdown-toggle" Style="width:80px">移除</button>

@@ -46,21 +46,21 @@
 								<td>{{ item.name }}</td>
 								<td>{{ item.desc }}</td>
                                 <td>{{ item.author }}</td>
-                                <td>{{ item.create_time }}</td>132
+                                <td>{{ item.create_time }}</td>
                                 <td>{{ item.status }}</td>
 								<td>
-                                    {% if item.status == 'created' %}
+                                    {% if item.status == 'in-review' %}
                                     <a href="/murano/package_review?action=accept&id={{ item.id }}" class="btn btn-success dropdown-toggle">通过</a>
                                     <a href="/murano/package_review?action=reject&id={{ item.id }}" class="btn btn-warning dropdown-toggle">拒绝</a>
                                     {% endif %}
-                                    {% if item.status == 'approved' %}
-                                        <a href="/murano/package_review?action=reject&id={{ item.id }}" class="btn btn-info dropdown-toggle">发布</a>
+                                    {% if item.status == 'approved' or item.status == 'unpublished' %}
+                                        <a href="/murano/package_review?action=published&id={{ item.id }}" class="btn btn-info dropdown-toggle">发布</a>
                                     {% endif %}
                                     {% if item.status != 'published' %}
-                                        <a href="/murano/package_review?action=reject&id={{ item.id }}" class="btn btn-danger dropdown-toggle">删除</a>
+                                        <a href="/murano/package_review?action=delete&id={{ item.id }}" class="btn btn-danger dropdown-toggle">删除</a>
                                     {% endif %}
                                     {% if item.status == 'published' %}
-                                        <a href="/murano/package_review?action=reject&id={{ item.id }}" class="btn btn-warning dropdown-toggle">取消发布</a>
+                                        <a href="/murano/package_review?action=unpublished&id={{ item.id }}" class="btn btn-warning dropdown-toggle">取消发布</a>
                                     {% endif %}
 								</td>
 							</tr>

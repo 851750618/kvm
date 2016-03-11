@@ -187,6 +187,9 @@ def murano_packages(request):
     packages_info = []
     id = 0
     for i in json_data['packages']:
+        pending_info = Package_review.objects.filter(name=i['name'])
+        if len(pending_info) < 1:
+            continue
         id = id + 1
         package_info = {}
         package_info['name'] = i['name']
@@ -195,6 +198,13 @@ def murano_packages(request):
         package_info['id'] = id
         packages_info.append(package_info)
     return render(request,'murano_packages.html',{'login_user':username,'roles':get_loginuser_role(request),'current_role':current_role,'packages_info':packages_info,'show':1})
+
+def quick_deploy(request):
+    import time
+    if request.GET['service'] == 'apache':
+        time.sleep(10)
+        messages.info(request,'Apache HTTP Server 已经开始部署，请稍后到我的环境中查看！')
+        return HttpResponseRedirect(domain + 'murano/index/' )
 
 
 def upload_package(request):
@@ -218,14 +228,14 @@ def upload_package(request):
             name = s['Name']
             author = s['Author']
     Package_review.objects.create(user=request.session.get('username'),name=name,desc=description,author=author,status='created',path=file_full_path)
-    messages.info(request,name + ' 导入成功,等待管理员审核')
+    messages.info(request,name + ' 导入成功')
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def admin_review_action(request):
     username = request.session.get('username')
     current_role = request.session.get('current_role')
     if request.GET['action'] == 'get_pengding_list':
-        pending_info = Package_review.objects.filter(status='created')
+        pending_info = Package_review.objects.filter(status='in-review')
         return render(request,'package_review.html',{'login_user':username,'roles':get_loginuser_role(request),'current_role':current_role,'pending_info':pending_info,'pending_len':len(pending_info)})
     if request.GET['action'] == 'get_all_package_list':
         all_info = Package_review.objects.filter()
@@ -233,13 +243,34 @@ def admin_review_action(request):
     if request.GET['action'] == 'accept':
         id = request.GET['id']
         accept_package_info = Package_review.objects.filter(id=id)
-        accept_package_info.update(status='apporved')
+        accept_package_info.update(status='approved')
         return HttpResponseRedirect(domain + 'murano/package_review?action=get_pengding_list')
     if request.GET['action'] == 'reject':
         id = request.GET['id']
         accept_package_info = Package_review.objects.filter(id=id)
         accept_package_info.update(status='reject')
         return HttpResponseRedirect(domain + 'murano/package_review?action=get_pengding_list')
+    if request.GET['action'] == 'in-review':
+        id = request.GET['id']
+        accept_package_info = Package_review.objects.filter(id=id)
+        accept_package_info.update(status='in-review')
+        messages.info(request,'提交成功，等待审核！')
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    if request.GET['action'] == 'delete':
+        id = request.GET['id']
+        accept_package_info = Package_review.objects.filter(id=id)
+        accept_package_info.delete()
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    if request.GET['action'] == 'published':
+        id = request.GET['id']
+        accept_package_info = Package_review.objects.filter(id=id)
+        accept_package_info.update(status='published')
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    if request.GET['action'] == 'unpublished':
+        id = request.GET['id']
+        accept_package_info = Package_review.objects.filter(id=id)
+        accept_package_info.update(status='unpublished')
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def publisher_package_action(request):
     username = request.session.get('username')
@@ -247,6 +278,7 @@ def publisher_package_action(request):
     if request.GET['action'] == 'get_packages_list':
         packages_info = Package_review.objects.filter(user=username)
         return render(request, 'creator_packages.html',{'login_user':username,'roles':get_loginuser_role(request),'current_role':current_role,'packages_info':packages_info})
+
 
 def murano_environment_action(request):
     if not request.user.is_authenticated():

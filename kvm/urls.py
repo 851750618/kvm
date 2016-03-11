@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^murano/package_review','murano.views.admin_review_action',),
     url(r'^murano/publisher_package','murano.views.publisher_package_action',),
     url(r'^switch_role','murano.views.switch_current_userrole',),
+    url(r'murano/quick_deploy','murano.views.quick_deploy'),
 
     url(r'^wso2/index','wso2.views.get_webapp_list',),
     url(r'^wso2/add_new_web_app/$','wso2.views.create_web_app_old',),
